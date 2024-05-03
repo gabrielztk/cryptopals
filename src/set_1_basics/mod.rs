@@ -1,0 +1,5 @@
+mod c_01_convert_hex_to_base64;
+mod c_02_fixed_xor;
+mod c_03_single_byte_xor_cipher;
+mod c_04_detect_single_character_xor;
+mod c_05_implement_repeating_key_xor;
