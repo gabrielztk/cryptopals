@@ -67,14 +67,14 @@ fn find_count(bytes: &Vec<u8>) -> (u64, [f64; SIZE]) {
     (count, letter_count)
 }
 
-pub fn find_wikipedia_word_frequency() {
+pub fn find_wikipedia_letter_frequency() {
     use std::fs::File;
     use std::io::prelude::*;
 
     // Wikipedia words file found at the following link
     // https://www.kaggle.com/datasets/ffatty/plain-text-wikipedia-simpleenglish?resource=download
 
-    let mut file = File::open("AllCombined.txt").unwrap();
+    let mut file = File::open("files/set_1/AllCombined.txt").unwrap();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
@@ -97,7 +97,7 @@ pub fn find_wikipedia_word_frequency() {
         frequency[i] = (letter_count[i] as f64) / count as f64;
     }
 
-    let mut file = File::create("character_frequency.txt").unwrap();
+    let mut file = File::create("files/set_1/character_frequency.txt").unwrap();
     let frequency = format!("{frequency:?}");
     file.write_all(frequency.as_bytes()).unwrap();
 }

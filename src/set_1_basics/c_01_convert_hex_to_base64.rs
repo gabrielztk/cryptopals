@@ -6,7 +6,7 @@ fn convert_hex_to_base64(string: String) -> String {
     let bytes = decode_hex(&hex_bytes);
     let base64 = encode_64(&bytes);
 
-    base64.into_iter().map(|byte| byte as char).collect()
+    String::from_utf8_lossy(&base64).to_string()
 }
 
 #[cfg(test)]

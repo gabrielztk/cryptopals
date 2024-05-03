@@ -8,7 +8,7 @@ fn fixed_xor(string_a: String, string_b: String) -> String {
     let bytes_xor = xor_bytes(bytes_a, bytes_b);
     let bytes_hex = encode_hex(&bytes_xor);
 
-    bytes_hex.into_iter().map(|b| b as char).collect()
+    String::from_utf8_lossy(&bytes_hex).to_string()
 }
 
 fn xor_bytes(bytes_a: Vec<u8>, bytes_b: Vec<u8>) -> Vec<u8> {
