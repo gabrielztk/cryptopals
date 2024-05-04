@@ -25,13 +25,13 @@ pub fn aes_in_ecb_mode(cipher_text: &[u8], key: &[u8]) -> Vec<u8> {
 #[cfg(test)]
 mod test {
     use super::aes_in_ecb_mode;
+    use crate::utils::encoding::base64;
     use crate::utils::file::read_bytes;
-    use base64::prelude::*;
 
     #[test]
     fn it_works() {
         let bytes = read_bytes("files/set_1/7.txt");
-        let decoded = BASE64_STANDARD.decode(bytes).unwrap();
+        let decoded = base64::decode(&bytes);
         let key = "YELLOW SUBMARINE".as_bytes();
         let decrypted = aes_in_ecb_mode(&decoded, key);
 

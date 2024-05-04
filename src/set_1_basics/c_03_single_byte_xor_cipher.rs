@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 use crate::utils::character_frequency::score_byte_sequence;
-use crate::utils::encoding::decode_hex;
+use crate::utils::encoding::hex;
 
 pub fn single_byte_xor_cipher(cypher_text: String) -> String {
-    let cypher_bytes = decode_hex(cypher_text.as_bytes());
+    let cypher_bytes = hex::decode(cypher_text.as_bytes());
 
     let (_, text_bytes, _) = single_byte_xor_cipher_bytes(&cypher_bytes);
     String::from_utf8_lossy(&text_bytes).to_string()

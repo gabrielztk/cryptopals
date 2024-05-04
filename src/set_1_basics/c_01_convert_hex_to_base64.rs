@@ -1,10 +1,10 @@
 #![allow(dead_code)]
-use crate::utils::encoding::{decode_hex, encode_64};
+use crate::utils::encoding::{base64, hex};
 
 fn convert_hex_to_base64(string: String) -> String {
     let hex_bytes = string.bytes().collect::<Vec<u8>>();
-    let bytes = decode_hex(&hex_bytes);
-    let base64 = encode_64(&bytes);
+    let bytes = hex::decode(&hex_bytes);
+    let base64 = base64::encode(&bytes);
 
     String::from_utf8_lossy(&base64).to_string()
 }

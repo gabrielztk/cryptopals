@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 use super::c_03_single_byte_xor_cipher::single_byte_xor_cipher_bytes;
-use crate::utils::encoding::decode_hex;
+use crate::utils::encoding::hex;
 
 pub fn detect_single_character_xor(lines: &[Vec<u8>]) -> String {
-    let decoded_lines: Vec<Vec<u8>> = lines.into_iter().map(|line| decode_hex(&line)).collect();
+    let decoded_lines: Vec<Vec<u8>> = lines.into_iter().map(|line| hex::decode(&line)).collect();
 
     let mut best_score = f64::MAX;
     let mut best_line = vec![];

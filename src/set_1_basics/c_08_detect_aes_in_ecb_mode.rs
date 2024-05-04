@@ -26,14 +26,14 @@ fn score_cipher_text(data: &[u8]) -> usize {
 #[cfg(test)]
 mod test {
     use super::detect_aes_in_ecb_mode;
-    use crate::utils::{encoding::decode_hex, file::read_lines};
+    use crate::utils::{encoding::hex, file::read_lines};
 
     #[test]
     fn it_works() {
         let lines = read_lines("files/set_1/8.txt");
         let decoded = lines
             .into_iter()
-            .map(|line| decode_hex(&line))
+            .map(|line| hex::decode(&line))
             .collect::<Vec<Vec<u8>>>();
 
         let line = detect_aes_in_ecb_mode(&decoded);

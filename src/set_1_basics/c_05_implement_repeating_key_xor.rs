@@ -1,5 +1,5 @@
 #![allow(dead_code)]
-use crate::utils::encoding::encode_hex;
+use crate::utils::encoding::hex;
 
 fn implement_repeating_key_xor(message: &str, key: &str) -> String {
     let mut message: Vec<u8> = message.bytes().collect::<Vec<u8>>();
@@ -7,7 +7,7 @@ fn implement_repeating_key_xor(message: &str, key: &str) -> String {
     let key = key.bytes().collect::<Vec<u8>>();
     message = xor_cipher(&message, &key);
 
-    String::from_utf8_lossy(&encode_hex(&message)).to_string()
+    String::from_utf8_lossy(&hex::encode(&message)).to_string()
 }
 
 pub fn xor_cipher(message: &[u8], key: &[u8]) -> Vec<u8> {
