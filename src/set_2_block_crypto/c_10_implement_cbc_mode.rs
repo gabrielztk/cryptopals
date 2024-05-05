@@ -27,7 +27,7 @@ mod test {
 
     #[test]
     fn it_works() {
-        let bytes = read_bytes("files/set_2/9.txt");
+        let bytes = read_bytes("files/set_2/10.txt");
         let decoded = base64::decode(&bytes);
         let initialization_vector = [0; 16];
         let key = "YELLOW SUBMARINE".as_bytes();

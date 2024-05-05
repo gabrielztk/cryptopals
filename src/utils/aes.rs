@@ -111,6 +111,11 @@ mod test {
         let decoded = base64::decode(&bytes);
         let key = "YELLOW SUBMARINE".as_bytes();
         let decrypted = aes_ecb_decrypt(&decoded, key);
+
+        assert!(
+            String::from_utf8_lossy(&decrypted).contains("I'm back and I'm ringin' the bell \n")
+        );
+
         let encrypted = aes_ecb_encrypt(&decrypted, key);
 
         assert_eq!(encrypted, decoded);
@@ -118,7 +123,7 @@ mod test {
 
     #[test]
     fn test_aes_cbc_decrypt() {
-        let bytes = read_bytes("files/set_2/9.txt");
+        let bytes = read_bytes("files/set_2/10.txt");
         let decoded = base64::decode(&bytes);
         let initialization_vector = [0; 16];
         let key = "YELLOW SUBMARINE".as_bytes();
@@ -131,11 +136,16 @@ mod test {
 
     #[test]
     fn test_aes_cbc_encrypt() {
-        let bytes = read_bytes("files/set_2/9.txt");
+        let bytes = read_bytes("files/set_2/10.txt");
         let decoded = base64::decode(&bytes);
         let initialization_vector = [0; 16];
         let key = "YELLOW SUBMARINE".as_bytes();
         let decrypted = aes_cbc_decrypt(&decoded, key, initialization_vector);
+
+        assert!(
+            String::from_utf8_lossy(&decrypted).contains("I'm back and I'm ringin' the bell \n")
+        );
+
         let encrypted = aes_cbc_encrypt(&decrypted, key, initialization_vector);
 
         assert_eq!(encrypted, decoded);

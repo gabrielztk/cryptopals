@@ -14,7 +14,7 @@ fn detect_aes_in_ecb_mode(lines: &[Vec<u8>]) -> usize {
         .1
 }
 
-fn score_cipher_text(data: &[u8]) -> usize {
+pub fn score_cipher_text(data: &[u8]) -> usize {
     let unique_sections: HashSet<[u8; 16]> = data
         .chunks_exact(16)
         .map(|vec| vec.try_into().unwrap())
