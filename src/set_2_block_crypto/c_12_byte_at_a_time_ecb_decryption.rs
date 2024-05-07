@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#[allow(unused_assignments)]
 use std::collections::HashMap;
 
 use crate::set_2_block_crypto::c_09_implement_pkcs7_padding::pkcs7_padding;
@@ -22,32 +23,36 @@ const UNKNOWN_SECRET: [u8; 138] = [
 fn byte_at_a_time_ecb_decryption() -> Vec<u8> {
     let (block_size, secret_size) = block_and_secret_size();
 
-    let repeated_bytes_max_size = block_size - 1;
+    let encryption_mode =
+        detect_aes_mode(&encrypt_with_secrets("A".repeat(block_size * 3).as_bytes()));
+
+    if encryption_mode != Encryption::ECB {
+        return "Not being encrypted with ECB".bytes().collect();
+    }
+
+    let know_bytes_max_size = block_size - 1;
 
     let mut secret: Vec<u8> = vec![0; secret_size];
-    let mut current_byte: usize = 0;
-    let mut know_bytes = Vec::with_capacity(block_size);
-    let mut byte_dictionary: HashMap<Vec<u8>, u8> = HashMap::with_capacity(256);
+    let mut know_bytes: Vec<u8> = Vec::with_capacity(block_size);
 
-    while current_byte < secret_size {
-        let repeated_bytes_size = repeated_bytes_max_size - (current_byte % block_size);
+    #[allow(unused_assignments)]
+    let mut byte_dictionary: HashMap<Vec<u8>, u8> = HashMap::with_capacity(u8::MAX as usize + 1);
 
-        let current_block = (repeated_bytes_size + current_byte) / block_size;
-        let block_index = current_block * block_size;
+    for current_byte in 0..secret_size {
+        let repeated_bytes_size = know_bytes_max_size - (current_byte % block_size);
         let repeated_bytes = vec!['A' as u8; repeated_bytes_size];
 
         if current_byte < 16 {
             know_bytes.extend_from_slice(&repeated_bytes);
             know_bytes.extend_from_slice(&secret[..current_byte]);
         } else {
-            know_bytes
-                .extend_from_slice(&secret[current_byte - repeated_bytes_max_size..current_byte]);
+            know_bytes.extend_from_slice(&secret[current_byte - know_bytes_max_size..current_byte]);
         }
 
         know_bytes.push(0);
         let know_bytes_size = know_bytes.len();
 
-        byte_dictionary = (0..=255)
+        byte_dictionary = (0..=u8::MAX)
             .map(|byte| {
                 know_bytes[know_bytes_size - 1] = byte;
 
@@ -58,12 +63,14 @@ fn byte_at_a_time_ecb_decryption() -> Vec<u8> {
             })
             .collect();
 
+        let current_block = (repeated_bytes_size + current_byte) / block_size;
+        let block_index = current_block * block_size;
+
         let true_block =
             encrypt_with_secrets(&repeated_bytes)[block_index..block_index + block_size].to_vec();
         let &true_byte = byte_dictionary.get(&true_block).unwrap();
 
         secret[current_byte] = true_byte;
-        current_byte += 1;
 
         know_bytes.clear();
         byte_dictionary.clear();
@@ -73,7 +80,7 @@ fn byte_at_a_time_ecb_decryption() -> Vec<u8> {
 }
 
 fn encrypt_with_secrets(data: &[u8]) -> Vec<u8> {
-    let mut new_data = vec![];
+    let mut new_data = Vec::with_capacity(data.len() + UNKNOWN_SECRET.len());
     new_data.extend_from_slice(data);
     new_data.extend_from_slice(&UNKNOWN_SECRET);
     let padded_data = pkcs7_padding(new_data);
@@ -82,7 +89,7 @@ fn encrypt_with_secrets(data: &[u8]) -> Vec<u8> {
 }
 
 fn block_and_secret_size() -> (usize, usize) {
-    let mut text = "".to_string();
+    let mut text = String::new();
     let mut padding_size = 0;
     let starting_block_size = encrypt_with_secrets(text.as_bytes()).len();
 
