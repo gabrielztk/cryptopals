@@ -7,7 +7,7 @@ use rand::Rng;
 const AES_KEY_SIZE: usize = 16;
 
 #[derive(Debug, PartialEq, Eq)]
-enum Encryption {
+pub enum Encryption {
     ECB,
     CBC,
 }
@@ -66,7 +66,7 @@ fn random_encryption(mut data: Vec<u8>) -> (Encryption, Vec<u8>) {
     (encryption, cipher_text)
 }
 
-fn detect_aes_mode(data: &[u8]) -> Encryption {
+pub fn detect_aes_mode(data: &[u8]) -> Encryption {
     if score_cipher_text(data) == 0 {
         Encryption::CBC
     } else {

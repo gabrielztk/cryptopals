@@ -59,7 +59,7 @@ pub fn aes_cbc_decrypt(
         .collect()
 }
 
-fn encrypt_block(block: &[u8], key: &[u8]) -> [u8; AES_CHUNK_SIZE] {
+pub fn encrypt_block(block: &[u8], key: &[u8]) -> [u8; AES_CHUNK_SIZE] {
     if !AES_KEY_SIZES.contains(&key.len()) {
         panic!();
     }
